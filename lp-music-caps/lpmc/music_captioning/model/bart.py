@@ -132,22 +132,12 @@ class BartCaptionModel(nn.Module):
                 num_return_sequences=1,
                 repetition_penalty=1.1)
         else:
-            outputs = self.bart.generate(input_ids=None,
-                                            attention_mask=None,
-                                            decoder_input_ids=input_ids,
-                                            decoder_attention_mask=decoder_attention_mask,
-                                            encoder_outputs=encoder_outputs,
-                                            head_mask=None,
-                                            decoder_head_mask=None,
-                                            inputs_embeds=None,
-                                            decoder_inputs_embeds=None,
-                                            use_cache=None,
-                                            output_attentions=None,
-                                            output_hidden_states=None,
-                                            max_length=max_length,
-                                            min_length=min_length,
-                                            num_beams=num_beams,
-                                            repetition_penalty=repetition_penalty)
+            print(model_kwargs)
+            outputs = self.bart.generate(input_ids=None, attention_mask=None, decoder_input_ids=input_ids,
+                decoder_attention_mask=decoder_attention_mask, encoder_outputs=encoder_outputs, head_mask=None,
+                decoder_head_mask=None, inputs_embeds=None, decoder_inputs_embeds=None, use_cache=None,
+                output_attentions=None, output_hidden_states=None, max_length=max_length, min_length=min_length,
+                num_beams=num_beams, repetition_penalty=repetition_penalty)
 
         captions = self.tokenizer.batch_decode(outputs, skip_special_tokens=True)
         return captions

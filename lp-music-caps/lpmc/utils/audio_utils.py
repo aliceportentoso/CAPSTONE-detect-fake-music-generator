@@ -1,3 +1,6 @@
+import librosa
+import ffmpeg
+
 STR_CLIP_ID = 'clip_id'
 STR_AUDIO_SIGNAL = 'audio_signal'
 STR_TARGET_VECTOR = 'target_vector'
@@ -42,9 +45,13 @@ def _resample_load_ffmpeg(path: str, sample_rate: int, downmix_to_mono: bool) ->
         cmd = f"ffmpeg -i \"{filename}\" {channel_cmd} {resampling_cmd} -f wav -"
         p = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         out, err = p.communicate()
+
         return out
 
-    src, sr = sf.read(io.BytesIO(_decode_resample_by_ffmpeg(path, sr=sample_rate)))
+    decode = _decode_resample_by_ffmpeg(path, sr=sample_rate)
+    bytes_path = io.BytesIO(decode)
+    src, sr = sf.read(bytes_path)
+
     return src.T, sr
 
 
